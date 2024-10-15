@@ -1,31 +1,50 @@
 import "./App.css";
 import { useState } from "react";
 import React from "react";
-import 
+import axios from "axios";
+import cloud from "./assets/cloudy.png";
 
 const App = () => {
   const [data, setData] = useState({});
-  cosnt[(location, setLocation)] = useState("");
+  const [location, setLocation] = useState("");
 
   const url = `https://api.openweathermap.org/data/2.5/weather?q=${location}&units=imperial&appid=4e2d9fc84c04b4e67760b3f99b7bd95d`;
 
   const searchEvent = (event) => {
-
-    if(event.key === "Enter"){
-
+    if (event.key === "Enter") {
+      axios.get(url).then((response) => {
+        setData(response.data);
+        console.log(response.data);
+      });
+      setLocation("");
     }
   };
 
+  let ruff;
+  let round;
+
+  if (data.main !== undefined) {
+    ruff = data.main.temp;
+    round = (Math.round(ruff - 32) * 5) / 9;
+  }
+
+  let rfeel;
+  let rround;
+  if (data.main !== undefined) {
+    rfeel = data.main.feels_like;
+    rround = (Math.round(rfeel - 32) * 5) / 9;
+  }
+
   return (
     <div className="app">
-      <h2 style={{ textAlign: "center", color: "#00000" }}>
+      <h2>
         <span>Weather</span> Forecast
       </h2>
       <div className="search">
         <input
           value={location}
-          onChange={(event) => setLocation(event.target.location)}
-         onKeyDown={searchEvent}
+          onChange={(event) => setLocation(event.target.value)}
+          onKeyDown={searchEvent}
           placeholder="Enter Location"
           type="text"
         />
@@ -34,15 +53,40 @@ const App = () => {
       <div className="container">
         <div className="top">
           <div className="location">
-            <p>Pak</p>
+            <p>{data.name}</p>
           </div>
 
           <div className="temp">
-            <p>Degree C</p>
+            {data.main ? (
+              <>
+                <div>
+                  <h1>{round.toFixed(0)}°C</h1>
+                </div>
+                <div>
+                  <img className="img" src={cloud} alt="Cloudy weather" />
+                </div>
+              </>
+            ) : null}
           </div>
         </div>
-        <div className="description">
-          <p>Main</p>
+      </div>
+      <div className="description">
+        {data.weather ? <p>{data.weather[0].description}</p> : null}
+      </div>
+
+      <div className="bottom">
+        <div className="feels">
+          {data.main ? <p>{rround.toFixed(0)} °C</p> : "-"}
+
+          <p>Feels Like</p>
+        </div>
+        <div className="humidity">
+          {data.main ? <p>{data.main.humidity}</p> : "-"}
+          <p>Humidity</p>
+        </div>
+        <div className="wind">
+          {data.main ? <p>{data.wind.speed}</p> : "-"}
+          <p>Wind Speed</p>
         </div>
       </div>
     </div>
