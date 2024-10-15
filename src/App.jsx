@@ -1,35 +1,52 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import "./App.css";
+import { useState } from "react";
+import React from "react";
+import 
 
-function App() {
-  const [count, setCount] = useState(0)
+const App = () => {
+  const [data, setData] = useState({});
+  cosnt[(location, setLocation)] = useState("");
+
+  const url = `https://api.openweathermap.org/data/2.5/weather?q=${location}&units=imperial&appid=4e2d9fc84c04b4e67760b3f99b7bd95d`;
+
+  const searchEvent = (event) => {
+
+    if(event.key === "Enter"){
+
+    }
+  };
 
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    <div className="app">
+      <h2 style={{ textAlign: "center", color: "#00000" }}>
+        <span>Weather</span> Forecast
+      </h2>
+      <div className="search">
+        <input
+          value={location}
+          onChange={(event) => setLocation(event.target.location)}
+         onKeyDown={searchEvent}
+          placeholder="Enter Location"
+          type="text"
+        />
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
-}
 
-export default App
+      <div className="container">
+        <div className="top">
+          <div className="location">
+            <p>Pak</p>
+          </div>
+
+          <div className="temp">
+            <p>Degree C</p>
+          </div>
+        </div>
+        <div className="description">
+          <p>Main</p>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default App;
