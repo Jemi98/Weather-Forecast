@@ -2,7 +2,7 @@ import "./App.css";
 import { useState } from "react";
 import React from "react";
 import axios from "axios";
-import cloud from "./assets/cloudy.png";
+import weatherImages from "./assets/data.jsx";
 
 const App = () => {
   const [data, setData] = useState({});
@@ -35,6 +35,10 @@ const App = () => {
     rround = (Math.round(rfeel - 32) * 5) / 9;
   }
 
+  let weatherType = data.weather ? data.weather[0].main : "Loading...";
+  let weatherImage = weatherImages[weatherType] || weatherImages["Clear"]; // Default to "clear" if no match
+
+  console.log(weatherType);
   return (
     <div className="app">
       <h2>
@@ -63,7 +67,7 @@ const App = () => {
                   <h1>{round.toFixed(0)}°C</h1>
                 </div>
                 <div>
-                  <img className="img" src={cloud} alt="Cloudy weather" />
+                  <img className="img" src={weatherImage} alt="weather Image" />
                 </div>
               </>
             ) : null}
@@ -74,21 +78,23 @@ const App = () => {
         {data.weather ? <p>{data.weather[0].description}</p> : null}
       </div>
 
-      <div className="bottom">
-        <div className="feels">
-          {data.main ? <p>{rround.toFixed(0)} °C</p> : "-"}
+      {data.name !== undefined ? (
+        <div className="bottom">
+          <div className="feels">
+            {data.main ? <p>{rround.toFixed(0)} °C</p> : "-"}
 
-          <p>Feels Like</p>
+            <p>Feels Like</p>
+          </div>
+          <div className="humidity">
+            {data.main ? <p>{data.main.humidity}</p> : "-"}
+            <p>Humidity</p>
+          </div>
+          <div className="wind">
+            {data.main ? <p>{data.wind.speed}</p> : "-"}
+            <p>Wind Speed</p>
+          </div>
         </div>
-        <div className="humidity">
-          {data.main ? <p>{data.main.humidity}</p> : "-"}
-          <p>Humidity</p>
-        </div>
-        <div className="wind">
-          {data.main ? <p>{data.wind.speed}</p> : "-"}
-          <p>Wind Speed</p>
-        </div>
-      </div>
+      ) : null}
     </div>
   );
 };
